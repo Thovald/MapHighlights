@@ -1,0 +1,8 @@
+Libs/*
+.tmp
+.vscode
+.graphics
+.release
+.snippets.lua
+.TODO.md
+.Notes

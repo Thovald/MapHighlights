@@ -1,0 +1,20 @@
+## Interface: 120000
+## Version: 1.0.0
+## Title: Map Highlights
+## Notes: Customizable Highlights to make certain icons on the World Map easier to see.|n|n/maphl or /maphighlights
+## Author: Thovald
+## SavedVariables: MapHighlightsDB
+## IconTexture: Interface\AddOns\MapHighlights\Media\Icon.tga
+## X-Curse-Project-ID:
+## X-Wago-ID:
+## OptionalDeps: LibStub, CallbackHandler-1.0, Ace3, LibSharedMedia-3.0, AceGUI-3.0-SharedMediaWidgets
+
+embeds.xml
+Locales/Locales.xml
+
+Core.lua
+Options.lua
+Modules\Highlights.lua
+Modules\PlayerLocation.lua
+
+
