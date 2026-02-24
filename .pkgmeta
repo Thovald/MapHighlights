@@ -17,6 +17,8 @@ externals:
     url: https://repos.curseforge.com/wow/ace3/trunk/AceLocale-3.0
   Libs/LibSharedMedia-3.0:
     url: https://repos.curseforge.com/wow/libsharedmedia-3-0/trunk/LibSharedMedia-3.0
+  Libs/AceGUI-3.0-SharedMediaWidgets:
+    url: https://repos.curseforge.com/wow/ace-gui-3-0-shared-media-widgets/trunk/AceGUI-3.0-SharedMediaWidgets
 
 ignore:
   - .github
