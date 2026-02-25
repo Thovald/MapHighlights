@@ -114,7 +114,7 @@ local function RebuildPinsForTemplate(template, map)
     end
 
     for pin in map:EnumeratePinsByTemplate(template) do
-        pinFunction(pin)
+        pinFunction(pin, _, _, _, "OnSettingsChanged")
     end
 end
 
