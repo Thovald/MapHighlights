@@ -100,7 +100,7 @@ L["descr_playerLocation"] = "Highlights your Player Location arrow when opening 
 L["checkbox_battlefieldMap"] = "Include BattlefieldMap"
 L["descr_battlefieldMap"] = "Highlights will be displayed on the BattlefieldMap in addition to the WorldMap."
 
-
+L["chatCommands"] = "Chat Commands:"
 
 
 

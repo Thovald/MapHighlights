@@ -1108,7 +1108,7 @@ local function SetHooksForAce()
         local f = AceConfigDialog.OpenFrames[appName]
         if not f then return end
 
-        --Highlights.OnSettingsChanged()
+        f:SetStatusText(L["chatCommands"].." /maphighlights /maphl")
 
         if not Private.isAceHooked then
             local frame = f.frame
