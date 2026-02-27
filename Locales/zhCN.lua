@@ -1,0 +1,109 @@
+local L = LibStub("AceLocale-3.0"):NewLocale("MapHighlights", "zhCN")
+if not L then return end
+-- Translated by 电视卫士(SGSwdzgr) on 2026/2/27 for Map Highlights 1.0.1
+
+L["enable"] = "启用"
+L["scale"] = "缩放"
+L["alpha"] = "透明度"
+L["textFont"] = "文本字体"
+L["textSize"] = "文本大小"
+L["show"] = "显示"
+L["enableColor"] = "启用颜色"
+L["text"] = "文本"
+L["highlight"] = "高亮"
+L["animation"] = "动画"
+L["color"] = "颜色"
+L["top"] = "顶部"
+L["bottom"] = "底部"
+L["left"] = "左侧"
+L["right"] = "右侧"
+L["center"] = "居中"
+L["offset"] = "偏移"
+L["glow"] = "发光"
+L["openOptions"] = "打开选项"
+
+-- Main menu
+L["tab_settings"] = "设置"
+L["tab_mapHighlights"] = "地图高亮"
+L["tab_other"] = "其他选项"
+
+-- map highlights
+--
+-- global settings
+L["header_globalHighlights"] = "全局高亮设置"
+L["descr_globalHighlights"] = "这些设置适用于所有地图的高亮。|n它们可以被每个高亮自身的独立设置所覆盖。"
+L["dropdown_textOutline"] = "文本轮廓"
+L["outlineNone"] = "无"
+L["outlineThin"] = "细"
+L["outlineThick"] = "粗"
+--
+-- individual settings
+L["header_hlSelection"] = "独立高亮设置"
+L["header_animation"] = "动画"
+L["descr_anim"] = "点击预览以触发动画"
+L["dropdown_animPlayback"] = "何时播放动画"
+L["animPlayback_onBoth"] = "打开地图与点击时"
+L["animPlayback_onMap"] = "仅在打开地图时"
+L["animPlayback_onClick"] = "仅在点击时"
+L["animPlayback_loop"] = "循环"
+
+L["dropdown_animStyle"] = "动画样式"
+L["animStyle1"] = "缩小并淡出"
+L["animStyle2"] = "放大并淡出"
+L["animStyle3"] = "脉冲"
+L["animStyle4"] = "闪烁"
+
+L["iconScale"] = "高亮缩放"
+L["dropdown_hlStyle"] = "高亮样式"
+L["hlStyle_glowingFG"] = "发光前景"
+L["hlStyle_solidBG"] = "纯色背景"
+L["hlStyle_glowingBG"] = "发光背景"
+
+L["dropdown_hlTexture"] = "高亮材质"
+L["hlTexture_1"] = "与图标相同"
+L["hlTexture_2"] = "柔和圆圈"
+L["hlTexture_3"] = "纯黄色圆圈"
+L["hlTexture_4"] = "纯棕色圆圈"
+
+L["textScale"] = "文本缩放"
+L["textPosition"] = "文本位置"
+L["textCustom"] = "自定义字体"
+L["textLevel"] = "文本层级"
+L["descr_textLevel"] = "较高的值将允许文本覆盖其他图标。|n|n2200-2800是个不错的范围。|n高于2800的值将会覆盖玩家位置箭头。"
+
+-- highlight group names
+L["Navigation"] = "导航"
+L["Locations"] = "位置"
+L["Objectives"] = "目标"
+L["Other"] = "其他"
+-- highlight names
+L["Waypoint"] = "路径点"
+L["Flightmaster"] = "飞行管理员"
+L["Flightmaster (undiscovered)"] = "飞行管理员（未发现）"
+L["Dungeon"] = "地下城"
+L["Raid"] = "团队副本"
+L["Delve"] = "地下堡"
+L["Bountiful Delve"] = "丰裕地下堡"
+L["Quest Hub"] = "任务枢纽"
+L["Zone Portal"] = "区域传送门"
+L["Cave Exit (Up)"] = "洞穴出口（向上）"
+L["Cave Exit (Down)"] = "洞穴出口（向下）"
+L["Rare Encounter"] = "稀有战斗"
+L["WQ Special Assignment"] = "世界任务-特别任务"
+L["S.C.R.A.P. Heap (active)"] = "S.C.R.A.P.废料堆（已激活）"
+L["S.C.R.A.P. Heap (inactive)"] = "S.C.R.A.P.废料堆（未激活）"
+L["Treasure Goblin Spawn"] = "财宝地精刷新点"
+
+
+L["checkbox_playerLocation"] = "高亮玩家位置"
+L["descr_playerLocation"] = "在打开地图和点击鼠标时高亮显示玩家位置箭头。"
+L["checkbox_battlefieldMap"] = "包含战场地图"
+L["descr_battlefieldMap"] = "除了世界地图之外，高亮内容也将显示在战场区域的地图上。"
+
+
+
+
+
+
+
+
