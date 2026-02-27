@@ -119,7 +119,7 @@ local HIGHLIGHT_SETTINGS_TEMPLATE = {
 
 local HIGHLIGHT_ORDER = {
     {
-        groupId = L["Navigation"],
+        groupId = "Navigation",
         childIds = {
             "waypoint",
             "zonePortal",
@@ -130,7 +130,7 @@ local HIGHLIGHT_ORDER = {
         },
     },
     {
-        groupId = L["Locations"],
+        groupId = "Locations",
         childIds = {
             "dungeon",
             "raid",
@@ -140,14 +140,14 @@ local HIGHLIGHT_ORDER = {
         },
     },
     {
-        groupId = L["Objectives"],
+        groupId = "Objectives",
         childIds = {
             "rareEncounter",
             "wqAssignmentLocked",
         },
     },
     {
-        groupId = L["Other"],
+        groupId = "Other",
         childIds = {
             "scrapHeap_active",
             "scrapHeap_inactive",
