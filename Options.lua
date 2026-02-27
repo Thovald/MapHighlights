@@ -710,13 +710,13 @@ local function GetHighlightEntry(id, info)
                 get = HighlightGetter(id, "textCustom"),
                 set = HighlightSetter(id, "textCustom"),
                 disabled = HighlightDisabler(id, "textShow"),
-                width = 0.8,
+                width = 1.5,
                 order = 95,
             },
             spacer4 = {
                 type = "description",
                 name = " ",
-                width = 1.5,
+                width = 0.5,
                 order = 96,
             },
             dropdown_textFont = {
@@ -764,7 +764,7 @@ local function GetHighlightEntry(id, info)
                 name = L["enable"],
                 get = HighlightGetter(id, "isEnabled"),
                 set = HighlightSetter(id, "isEnabled"),
-                width = 0.5,
+                width = 0.6,
                 order = 1,
             },
             slider_iconScale = {
@@ -820,8 +820,8 @@ local TAB_HIGHLIGHTS = {
             type = "description",
             name = L["descr_globalHighlights"].."|n|n",
             fontSize = "medium",
-            width = "full",
-            order = 5,
+            width = 2.5,
+            order = 3,
         },
         preview = {
             -- this is a thin strip along the entire width of the menu.
@@ -929,7 +929,7 @@ local TAB_HIGHLIGHTS = {
 local TAB_OTHER = {
     type = "group",
     name = L["tab_other"],
-    order = 1,
+    order = 5,
     args = {
         checkbox_playerHighlight = {
             type = "toggle",
@@ -1178,8 +1178,8 @@ function Config.RegisterOptions()
     CreateBlizzardOptions()
     SetHooksForAce()
 
-    -- C_Timer.After(1, function()
-    --     AceConfigDialog:Open("MapHighlights")
-    -- end)
+    C_Timer.After(1, function()
+        AceConfigDialog:Open("MapHighlights")
+    end)
 
 end

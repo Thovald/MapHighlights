@@ -94,7 +94,6 @@ L["S.C.R.A.P. Heap (active)"] = "S.C.R.A.P.废料堆（已激活）"
 L["S.C.R.A.P. Heap (inactive)"] = "S.C.R.A.P.废料堆（未激活）"
 L["Treasure Goblin Spawn"] = "财宝地精刷新点"
 
-
 L["checkbox_playerLocation"] = "高亮玩家位置"
 L["descr_playerLocation"] = "在打开地图和点击鼠标时高亮显示玩家位置箭头。"
 L["checkbox_battlefieldMap"] = "包含战场地图"

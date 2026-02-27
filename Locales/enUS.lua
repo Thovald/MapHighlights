@@ -91,9 +91,6 @@ L["WQ Special Assignment"] = true
 L["S.C.R.A.P. Heap (active)"] = true
 L["S.C.R.A.P. Heap (inactive)"] = true
 L["Treasure Goblin Spawn"] = true
-L["Flightmaster"] = true
-L["Flightmaster"] = true
-
 
 L["checkbox_playerLocation"] = "Highlight Player Location"
 L["descr_playerLocation"] = "Highlights your Player Location arrow when opening the map and on mouse clicks."
