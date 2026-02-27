@@ -1178,8 +1178,8 @@ function Config.RegisterOptions()
     CreateBlizzardOptions()
     SetHooksForAce()
 
-    C_Timer.After(1, function()
-        AceConfigDialog:Open("MapHighlights")
-    end)
+    -- C_Timer.After(1, function()
+    --     AceConfigDialog:Open("MapHighlights")
+    -- end)
 
 end

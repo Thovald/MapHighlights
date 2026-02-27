@@ -106,7 +106,6 @@ local function ReleasePinsByTemplate(template, map)
     end
 end
 
-
 local function RebuildPinsForTemplate(template, map)
     local pinFunction = Main.PIN_TEMPLATE_TO_FUNCTION[template]
     if not pinFunction then
@@ -117,7 +116,6 @@ local function RebuildPinsForTemplate(template, map)
         pinFunction(pin)
     end
 end
-
 
 function Highlights.OnSettingsChanged()
     -- wiping all pins and then rebuilding pins on active maps with OnAcquired
