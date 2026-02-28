@@ -98,7 +98,8 @@ L["checkbox_battlefieldMap"] = "Include BattlefieldMap"
 L["descr_battlefieldMap"] = "Highlights will be displayed on the BattlefieldMap in addition to the WorldMap."
 
 L["chatCommands"] = "Chat Commands:"
-
+L["preview"] = "Preview"
+L["disabled"] = "Disabled"
 
 
 

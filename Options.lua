@@ -21,7 +21,6 @@ local MENU_HEIGHT = 700
 local MENU_HEIGHT_MIN = 400
 local MENU_HEIGHT_MAX = 1000
 local DEFAULT_PROFILE
-local previewFrame
 
 ------------------
 -- Widgets
@@ -399,7 +398,7 @@ local function HighlightDisabler(id, primaryKey, secondaryKey)
 end
 
 local function UpdatePreview()
-    if not previewFrame:IsVisible() then
+    if not Config.previewFrame:IsVisible() then
         return
     end
 
@@ -416,26 +415,37 @@ end
 ------------------
 
 local function CreatePreviewFrame()
-    if previewFrame then return end
-    local baseFrame = CreateFrame("Frame", nil, UIParent)
-    baseFrame:SetSize(280, 165)
+    if Config.previewFrame then
+        return
+    end
 
-    local title = baseFrame:CreateFontString()
+    local previewFrame = CreateFrame("Frame", nil, UIParent)
+    previewFrame:SetSize(280, 165)
+
+    local title = previewFrame:CreateFontString()
     title:SetFont("Fonts\\FRIZQT__.TTF", 12, "OUTLINE")
-    title:SetPoint("BOTTOM", baseFrame, "TOP", 0, 3)
-    title:SetText(Main.ColorString("Preview", "gold"))
-    baseFrame.title = title
+    title:SetPoint("BOTTOM", previewFrame, "TOP", 0, 3)
+    title:SetText(Main.ColorString(L["preview"], "gold"))
+    previewFrame.title = title
 
-    local frame = CreateFrame("Frame", nil, baseFrame)
+    local frame = CreateFrame("Frame", nil, previewFrame)
     frame:SetAllPoints()
     frame:SetClipsChildren(true)
-    baseFrame.frame = frame
+    previewFrame.frame = frame
 
     local bg = frame:CreateTexture(nil, "BACKGROUND")
     bg:SetPoint("CENTER")
     bg:SetTexture("Interface\\AddOns\\MapHighlights\\Media\\PreviewBackground.tga")
     bg:SetSize(280, 280)
     frame.background = bg
+
+    local isDisabled = frame:CreateFontString()
+    isDisabled:SetFont("Fonts\\FRIZQT__.TTF", 24, "OUTLINE")
+    isDisabled:SetPoint("TOP", frame, "TOP", 0, -6)
+    isDisabled:SetText(Main.ColorString(L["disabled"], "red"))
+    isDisabled:Hide()
+    frame.isDisabledText = isDisabled
+    
 
     local pin = CreateFrame("Frame", nil, frame)
     pin:SetPoint("CENTER")
@@ -452,22 +462,20 @@ local function CreatePreviewFrame()
         Highlights.UpdatePreviewHighlights()
     end)
 
-    previewFrame = baseFrame
     Config.previewFrame = previewFrame
-
     Highlights.SetupPreviewFrame(frame)
     previewFrame:Hide()
 end
 
 function Config.ShowPreviewFrame(frame)
-    previewFrame:SetParent(frame)
-    previewFrame:SetPoint("TOPRIGHT",  -10, 25)
-    previewFrame:Show()
+    Config.previewFrame:SetParent(frame)
+    Config.previewFrame:SetPoint("TOPRIGHT",  -10, 25)
+    Config.previewFrame:Show()
 end
 
 function Config.HidePreviewFrame()
-    previewFrame:SetParent(UIParent)
-    previewFrame:Hide()
+    Config.previewFrame:SetParent(UIParent)
+    Config.previewFrame:Hide()
 end
 
 local function GetHighlightEntry(id, info)

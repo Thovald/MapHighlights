@@ -100,8 +100,8 @@ L["checkbox_battlefieldMap"] = "包含战场地图"
 L["descr_battlefieldMap"] = "除了世界地图之外，高亮内容也将显示在战场区域的地图上。"
 
 L["chatCommands"] = "聊天命令:"
-
-
+L["preview"] = "预览"
+L["disabled"] = "已禁用"
 
 
 

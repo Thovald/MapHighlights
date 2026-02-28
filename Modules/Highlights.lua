@@ -6,6 +6,8 @@ local db
 
 local LSM = LibStub("LibSharedMedia-3.0")
 
+local GetTime, pairs, ipairs = GetTime, pairs, ipairs
+
 local ICON_FRAME_POOL = {} -- fobj=bool - true if available
 local TEXT_FRAME_POOL = {}
 local ANIMATION_FRAME_POOL = {}
@@ -553,6 +555,17 @@ function Highlights.StopAllAnimations(map)
     end
 end
 
+function Highlights.PlayAnimationOnAcquired(pin, animFrame, lastAreaPOIUpdate)
+    if GetTime() == lastAreaPOIUpdate then
+        return
+    end
+
+    if animFrame.anim and animFrame.playOnMapOpen and not pinToFrames[pin] then
+        -- new pin, play animation
+        animFrame.anim:Play()
+    end
+end
+
 ------------------
 -- Preview
 ------------------
@@ -590,21 +603,31 @@ local function GetPreviewInfo(selectedId)
     end
 end
 
+local function TogglePreviewDisabledText(isDisabled)
+    local frame = Config.previewFrame.frame
+    if isDisabled then
+        frame.isDisabledText:Show()
+    else
+        frame.isDisabledText:Hide()
+    end
+end
+
 local function ApplyPreviewSettings(pin, selectedId)
     local atlasName, previewName, highlightDB = GetPreviewInfo(selectedId)
 
-    if not highlightDB.isEnabled then
+    pin.texture:SetAtlas(atlasName, true)
+    pin:SetSize(pin.texture:GetSize())
+    pin.name = previewName
+
+    local isDisabled = not highlightDB.isEnabled
+    TogglePreviewDisabledText(isDisabled)
+    if isDisabled then
         return
     end
 
     local pinInfo = Main.CreatePinInfo(atlasName, pin.texture, "pinType", pin)
     pinInfo.origScale = 1
     Highlights.ApplyScale(pinInfo, highlightDB)
-
-    pin.texture:SetAtlas(atlasName, true)
-    pin:SetSize(pin.texture:GetSize())
-    pin.name = previewName
-    --pin.texture:SetScale(pinInfo.currentScale)
 
     if pin.animFrame.anim then
         pin.animFrame.anim:Stop()
@@ -633,13 +656,15 @@ end
 function Highlights.UpdatePreviewHighlights()
     local selectedId = Config.selectedId
 
-    if selectedId == "" then
-        return
-    end
-
     local frame = Config.previewFrame.frame
     local pin = frame.pin
 
+    if selectedId == "" then
+        pin:Hide()
+        return
+    end
+
+    pin:Show()
     pin.iconFrame:Hide()
     pin.animFrame:Hide()
     pin.textFrame:Hide()

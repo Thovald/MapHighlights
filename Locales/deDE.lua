@@ -99,3 +99,5 @@ L["checkbox_battlefieldMap"] = "Gebietskarte einbeziehen"
 L["descr_battlefieldMap"] = "Zusätzlich zur Weltkarte werden Highlights auch auf der Gebietskarte angezeigt."
 
 L["chatCommands"] = "Chat Befehle:"
+L["preview"] = "Vorschau"
+L["disabled"] = "Deaktiviert"

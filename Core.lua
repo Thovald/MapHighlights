@@ -13,6 +13,12 @@ local PlayerLocation = Private.PlayerLocation
 local MapHooks = {} -- namespace for map hooks
 local isMapHooked = {}
 
+local GetTime, pairs, ipairs = GetTime, pairs, ipairs
+
+-- want to play OnAcquired animations when pin spawns. but spammy refreshes cause spammy animations.
+-- using this to distinguish refresh from spawn.
+local lastAreaPOIUpdate = 0
+
 -- assigned when we're hooking mixins further below
 Main.PIN_TEMPLATE_TO_FUNCTION = {}
 
@@ -23,6 +29,7 @@ Main.PIN_TEMPLATE_TO_FUNCTION = {}
 Main.frame = CreateFrame("Frame")
 Main.frame:RegisterEvent("PLAYER_LOGIN")
 Main.frame:RegisterEvent("ADDON_LOADED")
+Main.frame:RegisterEvent("AREA_POIS_UPDATED")
 
 local function RefreshSettings()
     Highlights.OnSettingsChanged()
@@ -89,6 +96,7 @@ local function ProcessPin(pin, hlInfo, pinInfo)
 
     if highlightDB.animShow then
         animFrame = Highlights.SetupAnimationFrame(pin, highlightDB, pinInfo)
+        Highlights.PlayAnimationOnAcquired(pin, animFrame, lastAreaPOIUpdate)
     end
 
     if not scaleChanged and not iconFrame and not textFrame and not animFrame then
@@ -396,6 +404,10 @@ local function OnLogin()
     ShowBattlefieldMapOnLogin()
 end
 
+local function OnAreaPOISUpdated()
+    lastAreaPOIUpdate = GetTime()
+end
+
 ------------------
 -- Event Handler
 ------------------
@@ -403,6 +415,7 @@ end
 local EVENT_HANDLER = {
     ["ADDON_LOADED"] = OnAddonLoaded,
     ["PLAYER_LOGIN"] = OnLogin,
+    ["AREA_POIS_UPDATED"] = OnAreaPOISUpdated,
 }
 
 function Main.frame:OnEvent(event, ...)
