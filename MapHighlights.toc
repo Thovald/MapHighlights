@@ -1,5 +1,5 @@
 ## Interface: 120001
-## Version: 1.0.5
+## Version: 1.0.6beta
 ## Title: Map Highlights
 ## Notes: Customizable Highlights to make certain icons on the World Map easier to see.|n|n/maphl or /maphighlights
 ## Author: Thovald

@@ -101,3 +101,18 @@ L["descr_battlefieldMap"] = "Zusätzlich zur Weltkarte werden Highlights auch au
 L["chatCommands"] = "Chat Befehle:"
 L["preview"] = "Vorschau"
 L["disabled"] = "Deaktiviert"
+
+L["header_playerLocation"] = "Spieler-Position hervorheben"
+L["header_playerDirection"] = "Spieler-Richtungs-Anzeige"
+L["header_misc"] = "Andere"
+L["descr_playerDirection"] = "Zeichnet eine Linie vom Spieler in die Blickrichtung des Spielers."
+L["colorStart"] = "Anfang"
+L["colorEnd"] = "Ende"
+L["length"] = "Länge"
+L["thickness"] = "Dicke"
+
+L["Custom"] = "Benutzerdefiniert"
+L["new"] = "Neu"
+L["rename"] = "Umbenennen"
+L["delete"] = "Löschen"
+L["copy"] = "Kopiere Einstellungen von ..."

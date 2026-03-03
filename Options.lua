@@ -2,6 +2,7 @@ local _, Private = ...
 local Main = Private.Main
 local Config = Private.Config
 local Highlights = Private.Highlights
+local PlayerLocation = Private.PlayerLocation
 
 local db
 
@@ -16,6 +17,7 @@ local L = LibStub("AceLocale-3.0"):GetLocale("MapHighlights")
 local pairs, ipairs 
     = pairs, ipairs
 
+local DEFAULT_GAME_FONT = GameFontNormal:GetFont()
 local MENU_WIDTH = 800
 local MENU_HEIGHT = 700
 local MENU_HEIGHT_MIN = 400
@@ -84,6 +86,11 @@ local DEFAULT_PROFILE_HIGHLIGHTS = {
 
 local DEFAULT_PROFILE_OTHER = {
     playerHighlight = true,
+    playerDirection = true,
+    directionScale = 0.3,
+    directionThickness = 1,
+    directionStartColor = {1,1,1,1},
+    directionEndColor = {1,1,1,0},
     battlefieldMap = false,
 }
 
@@ -153,6 +160,11 @@ local HIGHLIGHT_ORDER = {
             "greedyEmissary",
         },
     },
+    -- {
+    --     groupId = "Custom",
+    --     childIds = {
+    --     },
+    -- },
 }
 
 -- "overrides" contains anything different from HIGHLIGHT_SETTINGS_TEMPLATE
@@ -266,10 +278,14 @@ local HIGHLIGHT_INFO = {
             "TaxiNode_Continent_Horde",
             "TaxiNode_Continent_Alliance_Timed",
             "TaxiNode_Continent_Horde_Timed",
+            "poi-rift1",
+            "poi-rift2",
+            "WarlockPortal-Yellow-32x32",
+            "FlightMasterArgus",
         },
         overrides = {
-            iconScale = 1.4,
-            iconShow = true,
+            textColor = {1, 0.94, 0.88},
+            textShow = true,
         },
     },
     caveExitUp = {
@@ -339,15 +355,15 @@ local HIGHLIGHT_INFO = {
             textShow = true,
         },
     },
-    greedyEmissary = {
-        name = L["Treasure Goblin Spawn"],
-        textures = {
-            "WarlockPortal-Yellow-32x32",
-        },
-        overrides = {
-            textShow = true,
-        },
-    },
+    -- greedyEmissary = {
+    --     name = L["Treasure Goblin Spawn"],
+    --     textures = {
+    --         "WarlockPortal-Yellow-32x32",
+    --     },
+    --     overrides = {
+    --         textShow = true,
+    --     },
+    -- },
 }
 
 ------------------
@@ -365,7 +381,6 @@ local function HighlightSetter(id, key)
     end
 end
 
-
 local function HighlightColorGetter(id, key)
     return function()
         return unpack(db.hl.entries[id][key])
@@ -376,6 +391,19 @@ local function HighlightColorSetter(id, key)
     return function(_, r, g, b, a)
         db.hl.entries[id][key] = {r, g, b, a}
         Highlights.OnSettingsChanged()
+    end
+end
+
+local function GenericColorGetter(id, key)
+    return function()
+        return unpack(db[id][key])
+    end
+end
+
+local function GenericColorSetter(id, key, func)
+    return function(_, r, g, b, a)
+        db[id][key] = {r, g, b, a}
+        PlayerLocation.OnSettingsChanged()
     end
 end
 
@@ -423,9 +451,10 @@ local function CreatePreviewFrame()
     previewFrame:SetSize(280, 165)
 
     local title = previewFrame:CreateFontString()
-    title:SetFont("Fonts\\FRIZQT__.TTF", 12, "OUTLINE")
+    title:SetFont(DEFAULT_GAME_FONT, 12, "OUTLINE")
     title:SetPoint("BOTTOM", previewFrame, "TOP", 0, 3)
     title:SetText(Main.ColorString(L["preview"], "gold"))
+
     previewFrame.title = title
 
     local frame = CreateFrame("Frame", nil, previewFrame)
@@ -440,7 +469,7 @@ local function CreatePreviewFrame()
     frame.background = bg
 
     local isDisabled = frame:CreateFontString()
-    isDisabled:SetFont("Fonts\\FRIZQT__.TTF", 24, "OUTLINE")
+    isDisabled:SetFont(DEFAULT_GAME_FONT, 24, "OUTLINE")
     isDisabled:SetPoint("TOP", frame, "TOP", 0, -6)
     isDisabled:SetText(Main.ColorString(L["disabled"], "red"))
     isDisabled:Hide()
@@ -939,24 +968,108 @@ local TAB_OTHER = {
     name = L["tab_other"],
     order = 5,
     args = {
+        header_playerLocation = {
+            type = "header",
+            name = L["header_playerLocation"],
+            order = 0,
+        },
         checkbox_playerHighlight = {
             type = "toggle",
-            name = L["checkbox_playerLocation"],
+            name = L["enable"],
             desc = L["descr_playerLocation"],
             get = function(info)
                 return db.other.playerHighlight
             end,
             set = function(info, value)
                 db.other.playerHighlight = value
+                PlayerLocation.OnSettingsChanged()
             end,
-            width = 2,
+            width = 1,
             order = 1,
         },
         spacer1 = {
             type = "description",
-            name = " ",
-            width = 1,
+            name = " |n|n",
             order = 2,
+        },
+        header_playerDirection = {
+            type = "header",
+            name = L["header_playerDirection"],
+            order = 4,
+        },
+        checkbox_playerDirection = {
+            type = "toggle",
+            name = L["enable"],
+            desc = L["descr_playerDirection"],
+            get = function(info)
+                return db.other.playerDirection
+            end,
+            set = function(info, value)
+                db.other.playerDirection = value
+                PlayerLocation.OnSettingsChanged()
+            end,
+            width = 1,
+            order = 5,
+        },
+        slider_directionScale = {
+            type = "range",
+            name = L["length"],
+            min = 0.1,
+            max = 1,
+            bigStep = 0.1,
+            get = function() return db.other.directionScale end,
+            set = function(_, value)
+                db.other.directionScale = value
+                PlayerLocation.OnSettingsChanged()
+                end,
+            disabled = function() return not db.other.playerDirection end,
+            width = 1,
+            order = 6,
+        },
+        slider_directionThickness = {
+            type = "range",
+            name = L["thickness"],
+            min = 0.5,
+            max = 5,
+            bigStep = 0.01,
+            get = function() return db.other.directionThickness end,
+            set = function(_, value)
+                db.other.directionThickness = value
+                PlayerLocation.OnSettingsChanged()
+                end,
+            disabled = function() return not db.other.playerDirection end,
+            width = 1,
+            order = 7,
+        },
+        color_directionStart = {
+            name = L["colorStart"],
+            type = "color",
+            get = GenericColorGetter("other", "directionStartColor"),
+            set = GenericColorSetter("other", "directionStartColor", PlayerLocation.OnSettingsChanged),
+            disabled = function() return not db.other.playerDirection end,
+            hasAlpha = true,
+            width = 0.5,
+            order = 8,
+        },
+        color_directionEnd = {
+            name = L["colorEnd"],
+            type = "color",
+            get = GenericColorGetter("other", "directionEndColor"),
+            set = GenericColorSetter("other", "directionEndColor", PlayerLocation.OnSettingsChanged),
+            disabled = function() return not db.other.playerDirection end,
+            hasAlpha = true,
+            width = 0.5,
+            order = 9,
+        },
+        spacer2 = {
+            type = "description",
+            name = " |n|n",
+            order = 10,
+        },
+        header_misc = {
+            type = "header",
+            name = L["header_misc"],
+            order = 15,
         },
         checkbox_battleFieldMap = {
             type = "toggle",
@@ -967,10 +1080,15 @@ local TAB_OTHER = {
             end,
             set = function(info, value)
                 db.other.battlefieldMap = value
+                if Main.IsValidMap(BattlefieldMapFrame) then
+                    PlayerLocation.ShowHighlight(BattlefieldMapFrame)
+                else
+                    PlayerLocation.OnSettingsChanged()
+                end
                 Highlights.OnSettingsChanged()
             end,
-            width = 2,
-            order = 5,
+            width = 1.5,
+            order = 16,
         },
     }
 }

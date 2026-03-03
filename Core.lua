@@ -4,6 +4,7 @@ Private.Config = {}
 Private.Highlights = {}
 Private.PlayerLocation = {}
 Private.isAceHooked = false
+Private.locale = GetLocale()
 
 local db
 local Main = Private.Main
@@ -91,7 +92,7 @@ local function ProcessPin(pin, hlInfo, pinInfo)
     end
 
     if highlightDB.textShow then
-        textFrame = Highlights.SetupTextFrame(pin, highlightDB, pinInfo)
+        textFrame = Highlights.SetupTextFrame(pin, highlightDB, pinInfo, hlInfo)
     end
 
     if highlightDB.animShow then
@@ -386,7 +387,6 @@ local function OnAddonLoaded(addonName)
     elseif addonName == "MapHighlights" then
         local LSM = LibStub("LibSharedMedia-3.0")
         LSM:Register("font", "Roboto Condensed Bold", [[Interface\Addons\MapHighlights\Media\RobotoCondensed-Bold.ttf]])
-        
     end
 end
 

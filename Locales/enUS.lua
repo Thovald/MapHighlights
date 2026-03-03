@@ -101,7 +101,20 @@ L["chatCommands"] = "Chat Commands:"
 L["preview"] = "Preview"
 L["disabled"] = "Disabled"
 
+L["header_playerLocation"] = "Highlight Player Location"
+L["header_playerDirection"] = "Player Direction Line"
+L["header_misc"] = "Miscellaneous"
+L["descr_playerDirection"] = "Draws a line from the player in the direction the player is facing."
+L["colorStart"] = "Start"
+L["colorEnd"] = "End"
+L["length"] = "Length"
+L["thickness"] = "Thickness"
 
+L["Custom"] = "Custom" -- new highlights that the user added
+L["new"] = "New" -- add new custom highlight
+L["rename"] = "Rename" -- rename custom highlight
+L["delete"] = "Delete" -- delete custom highlight
+L["copy"] = "Copy Settings from ..." -- copy settings from one highlight to the current one
 
 
 

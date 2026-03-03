@@ -258,6 +258,86 @@ local TEXT_OUTLINE_MAPPING = {
     [3] = "THICKOUTLINE",
 }
 
+local function ShortenPortalTextChinese(str)
+    -- anything after full-width colon
+    local i = str:find("：", 1, true)
+    if i then
+        return "到" .. str:sub(i + 3) -- colon is 3 bytes in UTF-8
+    end
+
+    -- anything between 通往|到 and 的传送门
+    if str:sub(1, 6) == "通往" and str:sub(-12) == "的传送门" then
+        return "到" .. str:sub(7, -13)
+    end
+
+    -- anything between 到" and 的传送门
+    if str:sub(1, 3) == "到" and str:sub(-12) == "的传送门" then
+        return "到" .. str:sub(4, -13)
+    end
+
+    return str
+end
+
+local function ShortenPortalTextGerman(str)
+    local i = str:find(" zu den ", 1, true)
+    if i then
+        return str:sub(i + 8)
+    end
+
+    i = str:find(" nach ", 1, true)
+    if i then
+        return str:sub(i + 6) end
+
+    i = str:find(" zum ", 1, true)
+    if i then
+        return str:sub(i + 5)
+    end
+
+    i = str:find(" ins ", 1, true)
+    if i then
+        return str:sub(i + 5)
+    end
+
+    i = str:find(" zur ", 1, true)
+    if i then
+        return str:sub(i + 5)
+    end
+
+    return str
+end
+
+local function ShortenPortalTextEnglish(str)
+    local i = str:find(" to the ", 1, true)
+    if i then
+        return str:sub(i + 8)
+    end
+
+    i = str:find(" to ", 1, true)
+    if i then
+        return str:sub(i + 4)
+    end
+
+    return str
+end
+
+local LOCALE_TO_TEXT_HANDLERS = {
+    deDE = ShortenPortalTextGerman,
+    zhCN = ShortenPortalTextChinese,
+}
+
+local TEXT_HANDLERS = {
+    zonePortal = LOCALE_TO_TEXT_HANDLERS[Private.locale] or ShortenPortalTextEnglish
+}
+
+local function GetHighlightTextString(hlInfo, pinInfo)
+    local textHandler = TEXT_HANDLERS[hlInfo.id]
+    if not textHandler then
+        return pinInfo.name
+    else
+        return textHandler(pinInfo.name)
+    end
+end
+
 local function CreateTextFrame()
     local frame = CreateFrame("Frame")
     local text = frame:CreateFontString()
@@ -266,7 +346,7 @@ local function CreateTextFrame()
     return frame
 end
 
-local function ApplyTextSettings(textFrame, highlightDB, pinInfo, pin)
+local function ApplyTextSettings(textFrame, highlightDB, pinInfo, pin, hlInfo)
     textFrame:SetSize(pin:GetSize())
     textFrame:SetScale(db.hl.scale)
     local textPosInfo = TEXT_ANCHOR_MAPPING[highlightDB.textPosition]
@@ -287,20 +367,22 @@ local function ApplyTextSettings(textFrame, highlightDB, pinInfo, pin)
         font = db.hl.font
         outline = TEXT_OUTLINE_MAPPING[db.hl.textOutline]
     end
+
+    local text = GetHighlightTextString(hlInfo, pinInfo)
     textFrame.text:SetFont(LSM:Fetch("font", font), fontSize, outline)
-    textFrame.text:SetText(pinInfo.name)
+    textFrame.text:SetText(text)
     textFrame:SetAlpha(highlightDB.textAlpha)
 
 end
 
-function Highlights.SetupTextFrame(pin, highlightDB, pinInfo)
+function Highlights.SetupTextFrame(pin, highlightDB, pinInfo, hlInfo)
     local textFrame = GetHighlightFrame(TEXT_FRAME_POOL, CreateTextFrame)
 
     textFrame:SetParent(pin)
     textFrame:SetPoint("CENTER")
     textFrame:SetFrameLevel(db.hl.textLevel)
 
-    ApplyTextSettings(textFrame, highlightDB, pinInfo, pin)
+    ApplyTextSettings(textFrame, highlightDB, pinInfo, pin, hlInfo)
 
     return textFrame
 end
@@ -598,7 +680,7 @@ end
 local function GetPreviewInfo(selectedId)
     for _, info in pairs(Highlights.textureToInfo) do
         if info.id == selectedId then
-            return info.previewTexture, info.name, info.db
+            return info.previewTexture, info.name, info.db, info
         end
     end
 end
@@ -613,7 +695,7 @@ local function TogglePreviewDisabledText(isDisabled)
 end
 
 local function ApplyPreviewSettings(pin, selectedId)
-    local atlasName, previewName, highlightDB = GetPreviewInfo(selectedId)
+    local atlasName, previewName, highlightDB, hlInfo = GetPreviewInfo(selectedId)
 
     pin.texture:SetAtlas(atlasName, true)
     pin:SetSize(pin.texture:GetSize())
@@ -643,7 +725,7 @@ local function ApplyPreviewSettings(pin, selectedId)
 
     if highlightDB.textShow then
         pin.textFrame:Show()
-        ApplyTextSettings(pin.textFrame, highlightDB, pinInfo, pin)
+        ApplyTextSettings(pin.textFrame, highlightDB, pinInfo, pin, hlInfo)
     end
 
     if highlightDB.animShow then
@@ -661,6 +743,7 @@ function Highlights.UpdatePreviewHighlights()
 
     if selectedId == "" then
         pin:Hide()
+        TogglePreviewDisabledText(false)
         return
     end
 
@@ -736,7 +819,7 @@ function Highlights.PrintIcons(mapFrame)
     local children = {frame:GetChildren()}
     print("__________________________________________")
     for _, child in ipairs(children) do
-        if child.pinTemplate and child.pinTemplate ~= "FlightPointPinTemplate" then
+        if child.pinTemplate then
             local texture = (child.Icon and child.Icon:GetAtlas())
                     or (child.Texture and child.Texture:GetAtlas())
                     or (child.UnderlayAtlas and child.UnderlayAtlas:GetAtlas())

@@ -1,61 +1,122 @@
 local _, Private = ...
+local Main = Private.Main
 local PlayerLocation = Private.PlayerLocation
 local db
 
 local playerHighlightFrames = {}
+local ARROW_SIZE = 17
+local LINE_THICKNESS
+local LINE_LENGTH_SCALE -- 1 means full length of map's diagonal
+
 
 function PlayerLocation.UpdateDB()
     db = Private.db.profile
+    PlayerLocation.OnSettingsChanged()
 end
 
-function PlayerLocation.HideHighlight(map)
-    local playerHighlight = playerHighlightFrames[map]
+local function SetVisibility(frame)
+    local showArrow = Private.db.profile.other.playerHighlight
+    local showDirection = Private.db.profile.other.playerDirection
 
-    if not playerHighlight then
+    if not showArrow then
+        frame.arrow:Hide()
+    end
+
+    if showDirection then
+        frame.line:Show()
+    else
+        frame.line:Hide()
+    end
+end
+
+function PlayerLocation.OnSettingsChanged()
+    LINE_THICKNESS = db.other.directionThickness
+    LINE_LENGTH_SCALE = db.other.directionScale
+    for map, frame in pairs(playerHighlightFrames) do
+        if Main.IsValidMap(map) then
+            frame:Show()
+            SetVisibility(frame)
+            PlayerLocation.UpdateHighlightProperties(frame)
+        else
+            frame:Hide()
+        end
+    end
+end
+
+function PlayerLocation.HideHighlight(map, type)
+    local frame = playerHighlightFrames[map]
+
+    if not frame then
         return
     end
 
-    playerHighlight.OnUpdate = nil
-    playerHighlight.animStart:Stop()
-    playerHighlight.animEnd:Stop()
-    playerHighlight:SetScale(1)
-    playerHighlight:Hide()
+    if type == "all" then
+        frame.OnUpdate = nil
+        frame:Hide()
+        frame.line:Hide()
+    end
+
+    if type == "all" or type == "arrow" then
+        frame.arrow.animStart:Stop()
+        frame.arrow.animEnd:Stop()
+        frame.arrow:SetScale(1)
+        frame.arrow:Hide()
+    end
 end
 
-local function UpdateHighlight(self)
-    local mapId = self.mapFrame:GetMapID()
+local function UpdateHighlight(frame)
+    local mapId = frame.mapFrame:GetMapID()
     if not mapId then
-        PlayerLocation.HideHighlight(self.mapFrame)
+        PlayerLocation.HideHighlight(frame.mapFrame, "all")
         return
     end
 
     local playerPos = C_Map.GetPlayerMapPosition(mapId, "player")
     if not playerPos then
-        PlayerLocation.HideHighlight(self.mapFrame)
+        PlayerLocation.HideHighlight(frame.mapFrame, "all")
         return
     end
 
-    local mapFrame = self.mapFrame.ScrollContainer
+    local parent = frame.parent
     local x, y = playerPos:GetXY()
-
-    local width, height = mapFrame:GetSize()
-    if mapFrame.viewRect then
-        local v = mapFrame.viewRect
+    local width, height = parent:GetSize()
+    local angle = GetPlayerFacing() or 0
+    if parent.viewRect then
+        local v = parent.viewRect
         x = (x - v.left) / (v.right - v.left)
         y = (y - v.top) / (v.bottom - v.top)
     end
     x = x * width
-    y = y * height
-    self:SetPointsOffset(x,-y)
-    self.texture:SetRotation(GetPlayerFacing() or 0)
+    y = y * height * -1
+    frame:SetPointsOffset(x,y)
+
+    local scale = frame.parent:GetEffectiveScale() * frame.extraScale
+    if scale ~= frame.lastScale then
+        frame.scale = scale
+        PlayerLocation.UpdateHighlightProperties(frame)
+    end
+
+    if db.other.playerHighlight then
+        frame.arrow.texture:SetRotation(angle)
+    end
+
+    if db.other.playerDirection then
+        local lineLength = math.sqrt(width * width + height * height) * LINE_LENGTH_SCALE
+        angle = angle + 1.57 -- is off by 90°
+        local ex, ey = math.cos(angle) *  lineLength, math.sin(angle) * lineLength
+        frame.line:SetStartPoint("CENTER", frame, 0, 0)
+        frame.line:SetEndPoint("CENTER", frame, ex, ey)
+    end
+
 end
 
 local function CreatePlayerLocationAnimation(frame, map)
+    local arrow = frame.arrow
     local introTime = 0.5
     local bounceTime = 0.7
 
     -- scale in
-    local animStart = frame:CreateAnimationGroup()
+    local animStart = arrow:CreateAnimationGroup()
     local scaleStart = animStart:CreateAnimation("Scale")
     scaleStart:SetScaleFrom(4, 4)
     scaleStart:SetDuration(introTime)
@@ -67,7 +128,7 @@ local function CreatePlayerLocationAnimation(frame, map)
     fadeStart:SetSmoothing("OUT")
 
     -- couldn't get "BOUNCE" to loop smoothly - using "REPEAT" instead
-    local animEnd = frame:CreateAnimationGroup()
+    local animEnd = arrow:CreateAnimationGroup()
     animEnd:SetLooping("REPEAT")
     local scaleUp = animEnd:CreateAnimation("Scale")
     scaleUp:SetScale(1.2, 1.2)
@@ -80,46 +141,85 @@ local function CreatePlayerLocationAnimation(frame, map)
     scaleDown:SetOrder(2)
     scaleDown:SetSmoothing("IN_OUT")
 
-    frame.animStart = animStart
-    frame.animEnd = animEnd
+    arrow.animStart = animStart
+    arrow.animEnd = animEnd
 
     animStart:SetScript("OnFinished", function()
         animEnd:Play()
-        local startTime = frame.startTime
+        local startTime = arrow.startTime
 
         C_Timer.After(bounceTime * 3, function()
-            if startTime ~= frame.startTime then
+            if startTime ~= arrow.startTime then
                 return
             end
-            PlayerLocation.HideHighlight(map)
+
+            if Private.db.profile.other.playerDirection then
+                PlayerLocation.HideHighlight(map, "arrow")
+            else
+                PlayerLocation.HideHighlight(map, "all")
+            end
         end)
     end)
 
 end
 
 local function CreatePlayerHighlight(map)
-    local frame = CreateFrame("Frame")
-    frame:SetSize(28, 28)
-    local tex = frame:CreateTexture()
-    tex:SetAtlas("UI-WorldMapArrow")
-    tex:SetAllPoints()
-    frame.texture = tex
+    local pinContainer = map.ScrollContainer.Child
 
-    local mapFrame = map.ScrollContainer
-    frame:SetParent(mapFrame)
+    -- base "frame" to handle only position.
+    local frame = CreateFrame("Frame", nil, pinContainer)
+    frame:SetParent(pinContainer)
     frame:SetFrameStrata("MEDIUM")
-    frame:SetFrameLevel(9000)
-    frame:SetPoint("CENTER", mapFrame, "TOPLEFT")
+    frame:SetFrameLevel(2400)
+    frame:SetPoint("CENTER", pinContainer, "TOPLEFT")
+    frame:SetSize(20,20) -- doesn't matter, but needs to be set for line to show
+
+    -- arrow's size depends on map conditions and is set elsewhere
+    local arrow = CreateFrame("Frame", nil, frame)
+    arrow:SetFrameLevel(3000)
+    arrow:SetPoint("CENTER")
+    local arrowTex = arrow:CreateTexture()
+    arrowTex:SetAllPoints()
+    arrowTex:SetAtlas("UI-WorldMapArrow")
+    arrow.texture = arrowTex
+    frame.arrow = arrow
+
+    -- line thickness and length is the same deal as arrow size
+    local line = frame:CreateLine(nil, "OVERLAY", nil, 7)
+    line:SetTexture('interface/buttons/white8x8')
+    frame.line = line
 
     CreatePlayerLocationAnimation(frame, map)
 
+    if map:GetDebugName() == "BattlefieldMapFrame" then
+        frame.extraScale = 2
+        frame:SetFrameLevel(2000)
+    else
+        frame.extraScale = 1
+    end
+
     frame.mapFrame = map
+    frame.parent = pinContainer
     playerHighlightFrames[map] = frame
     return frame
 end
 
+function PlayerLocation.UpdateHighlightProperties(frame)
+    local scale = frame.scale
+    frame.arrow:SetSize(ARROW_SIZE/scale, ARROW_SIZE/scale)
+    frame.line:SetThickness(LINE_THICKNESS/scale)
+    frame.lastScale = scale
+
+    local startColor = CreateColor(unpack(db.other.directionStartColor))
+    local endColor = CreateColor(unpack(db.other.directionEndColor))
+    frame.line:SetGradient('HORIZONTAL', startColor, endColor)
+end
+
 function PlayerLocation.ShowHighlight(map)
-    if not Private.db.profile.other.playerHighlight then
+    local showArrow = Private.db.profile.other.playerHighlight
+    local showDirection = Private.db.profile.other.playerDirection
+
+    if not showArrow and not showDirection then
         return
     end
 
@@ -130,7 +230,23 @@ function PlayerLocation.ShowHighlight(map)
     end
 
     playerHighlight:Show()
-    playerHighlight.animStart:Play()
-    playerHighlight:SetScript("OnUpdate", UpdateHighlight)
-    playerHighlight.startTime = GetTime()
+
+    if showArrow then
+        playerHighlight.arrow:Show()
+        playerHighlight.arrow.animStart:Play()
+        playerHighlight.arrow.startTime = GetTime()
+        playerHighlight:SetScript("OnUpdate", UpdateHighlight)
+    else
+        playerHighlight.arrow:Hide()
+    end
+
+    if showDirection then
+        playerHighlight:SetScript("OnUpdate", UpdateHighlight)
+        playerHighlight.line:Show()
+    else
+        playerHighlight.line:Hide()
+    end
+
+    playerHighlight.scale = playerHighlight.parent:GetEffectiveScale()
+    PlayerLocation.UpdateHighlightProperties(playerHighlight)
 end
