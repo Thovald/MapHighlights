@@ -259,74 +259,73 @@ local TEXT_OUTLINE_MAPPING = {
 }
 
 local function ShortenPortalTextChinese(str)
-    -- anything after full-width colon
-    local i = str:find("：", 1, true)
-    if i then
-        return "到" .. str:sub(i + 3) -- colon is 3 bytes in UTF-8
+    local verb, location = str:match("^(到)(.+)的")
+    if verb then
+        return verb .. location
     end
 
-    -- anything between 通往|到 and 的传送门
-    if str:sub(1, 6) == "通往" and str:sub(-12) == "的传送门" then
-        return "到" .. str:sub(7, -13)
+    verb, location = str:match("^(通往)(.+)的")
+    if verb then
+        return verb .. location
     end
 
-    -- anything between 到" and 的传送门
-    if str:sub(1, 3) == "到" and str:sub(-12) == "的传送门" then
-        return "到" .. str:sub(4, -13)
-    end
-
-    return str
-end
-
-local function ShortenPortalTextGerman(str)
-    local i = str:find(" zu den ", 1, true)
-    if i then
-        return str:sub(i + 8)
-    end
-
-    i = str:find(" nach ", 1, true)
-    if i then
-        return str:sub(i + 6) end
-
-    i = str:find(" zum ", 1, true)
-    if i then
-        return str:sub(i + 5)
-    end
-
-    i = str:find(" ins ", 1, true)
-    if i then
-        return str:sub(i + 5)
-    end
-
-    i = str:find(" zur ", 1, true)
-    if i then
-        return str:sub(i + 5)
+    verb, location = str:match("^(前往)(.+)的")
+    if verb then
+        return verb .. location
     end
 
     return str
 end
 
-local function ShortenPortalTextEnglish(str)
-    local i = str:find(" to the ", 1, true)
-    if i then
-        return str:sub(i + 8)
+local PORTAL_TEXT_PATTERNS = {
+    deDE = {
+        " zu den ",
+        " nach ",
+        " zum ",
+        " ins ",
+        " zur ",
+    },
+    enUS = {
+        " to the ",
+        " to ",
+    },
+}
+PORTAL_TEXT_PATTERNS["enGB"] = PORTAL_TEXT_PATTERNS["enUS"]
+
+local function ShortenPortalTextGeneric(str)
+    local patterns = PORTAL_TEXT_PATTERNS[Private.locale]
+    if not patterns then
+        return str
     end
 
-    i = str:find(" to ", 1, true)
-    if i then
-        return str:sub(i + 4)
+    for _, phrase in ipairs(patterns) do
+        local i = str:find(phrase, 1, true)
+        if i then
+            return str:sub(i + #phrase)
+        end
     end
 
     return str
 end
 
-local LOCALE_TO_TEXT_HANDLERS = {
-    deDE = ShortenPortalTextGerman,
+local PORTAL_TEXT_HANDLERS = {
+    enGB = ShortenPortalTextGeneric,
+    enUS = ShortenPortalTextGeneric,
+    deDE = ShortenPortalTextGeneric,
     zhCN = ShortenPortalTextChinese,
 }
 
+local function ShortenPortalText(str)
+    local portalTextHandler = PORTAL_TEXT_HANDLERS[Private.locale]
+    if portalTextHandler then
+        return portalTextHandler(str)
+    else
+        return str
+    end
+end
+
 local TEXT_HANDLERS = {
-    zonePortal = LOCALE_TO_TEXT_HANDLERS[Private.locale] or ShortenPortalTextEnglish
+    zonePortal = ShortenPortalText
 }
 
 local function GetHighlightTextString(hlInfo, pinInfo)

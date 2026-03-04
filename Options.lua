@@ -86,7 +86,7 @@ local DEFAULT_PROFILE_HIGHLIGHTS = {
 
 local DEFAULT_PROFILE_OTHER = {
     playerHighlight = true,
-    playerDirection = true,
+    playerDirection = 3,
     directionScale = 0.3,
     directionThickness = 1,
     directionStartColor = {1,1,1,1},
@@ -177,6 +177,11 @@ local HIGHLIGHT_INFO = {
             "Waypoint-MapPin-Tracked",
         },
         overrides = {
+            iconShow = true,
+            iconScale = 1.2,
+            iconStyle = 2,
+            iconColorEnable = true,
+            iconColor = {0, 0, 0},
             animStyle = 4,
             animPlayback = 4,
             animShow = true,
@@ -400,10 +405,10 @@ local function GenericColorGetter(id, key)
     end
 end
 
-local function GenericColorSetter(id, key, func)
+local function GenericColorSetter(id, key, namespace, func, args)
     return function(_, r, g, b, a)
         db[id][key] = {r, g, b, a}
-        PlayerLocation.OnSettingsChanged()
+        namespace[func](args)
     end
 end
 
@@ -655,6 +660,7 @@ local function GetHighlightEntry(id, info)
             get = HighlightColorGetter(id, "iconColor"),
             set = HighlightColorSetter(id, "iconColor"),
             disabled = HighlightDisabler(id, "iconColorEnable", "iconShow"),
+            hasAlpha = true,
             order = 60,
         },
     }
@@ -739,6 +745,7 @@ local function GetHighlightEntry(id, info)
                 get = HighlightColorGetter(id, "textColor"),
                 set = HighlightColorSetter(id, "textColor"),
                 disabled = HighlightDisabler(id, "textShow"),
+                hasAlpha = true,
                 order = 90,
             },
             checkbox_textCustom = {
@@ -948,7 +955,6 @@ local TAB_HIGHLIGHTS = {
             width = 1,
             order = 25,
         },
-
         bottomSpacer = {
             type = "description",
             name = "|n|n|n",
@@ -997,16 +1003,17 @@ local TAB_OTHER = {
             name = L["header_playerDirection"],
             order = 4,
         },
-        checkbox_playerDirection = {
-            type = "toggle",
-            name = L["enable"],
+        dropdown_playerDirection = {
+            type = "select",
+            name = L["show"],
+            values = {L["never"], L["always"], L["whileFlying"]},
             desc = L["descr_playerDirection"],
             get = function(info)
                 return db.other.playerDirection
             end,
             set = function(info, value)
                 db.other.playerDirection = value
-                PlayerLocation.OnSettingsChanged()
+                PlayerLocation.OnSettingsChanged({ignoreArrow = true})
             end,
             width = 1,
             order = 5,
@@ -1020,7 +1027,7 @@ local TAB_OTHER = {
             get = function() return db.other.directionScale end,
             set = function(_, value)
                 db.other.directionScale = value
-                PlayerLocation.OnSettingsChanged()
+                PlayerLocation.OnSettingsChanged({ignoreArrow = true})
                 end,
             disabled = function() return not db.other.playerDirection end,
             width = 1,
@@ -1035,7 +1042,7 @@ local TAB_OTHER = {
             get = function() return db.other.directionThickness end,
             set = function(_, value)
                 db.other.directionThickness = value
-                PlayerLocation.OnSettingsChanged()
+                PlayerLocation.OnSettingsChanged({ignoreArrow = true})
                 end,
             disabled = function() return not db.other.playerDirection end,
             width = 1,
@@ -1045,7 +1052,7 @@ local TAB_OTHER = {
             name = L["colorStart"],
             type = "color",
             get = GenericColorGetter("other", "directionStartColor"),
-            set = GenericColorSetter("other", "directionStartColor", PlayerLocation.OnSettingsChanged),
+            set = GenericColorSetter("other", "directionStartColor", PlayerLocation, "OnSettingsChanged", {ignoreArrow = true}),
             disabled = function() return not db.other.playerDirection end,
             hasAlpha = true,
             width = 0.5,
@@ -1055,7 +1062,7 @@ local TAB_OTHER = {
             name = L["colorEnd"],
             type = "color",
             get = GenericColorGetter("other", "directionEndColor"),
-            set = GenericColorSetter("other", "directionEndColor", PlayerLocation.OnSettingsChanged),
+            set = GenericColorSetter("other", "directionEndColor", PlayerLocation, "OnSettingsChanged", {ignoreArrow = true}),
             disabled = function() return not db.other.playerDirection end,
             hasAlpha = true,
             width = 0.5,
@@ -1128,7 +1135,6 @@ local function GetHighlightGroup(name)
                 end,
                 order = 0,
             },
-
         },
     }
     return group

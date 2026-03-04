@@ -103,6 +103,16 @@ L["chatCommands"] = "聊天命令:"
 L["preview"] = "预览"
 L["disabled"] = "已禁用"
 
-
+L["header_playerLocation"] = "高亮玩家位置"
+L["header_playerDirection"] = "面朝方向辅助线"
+L["header_misc"] = "杂项"
+L["descr_playerDirection"] = "从玩家位置绘制一条指向其面朝方向的辅助线段"
+L["never"] = "从不"
+L["always"] = "始终"
+L["whileFlying"] = "仅在飞行时"
+L["colorStart"] = "起点"
+L["colorEnd"] = "终点"
+L["length"] = "长度"
+L["thickness"] = "粗细"
 
 

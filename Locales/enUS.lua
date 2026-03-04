@@ -93,9 +93,9 @@ L["S.C.R.A.P. Heap (inactive)"] = true
 L["Treasure Goblin Spawn"] = true
 
 L["checkbox_playerLocation"] = "Highlight Player Location"
-L["descr_playerLocation"] = "Highlights your Player Location arrow when opening the map and on mouse clicks."
+L["descr_playerLocation"] = "Highlights the location arrow when opening the map and on mouse clicks."
 L["checkbox_battlefieldMap"] = "Include BattlefieldMap"
-L["descr_battlefieldMap"] = "Highlights will be displayed on the BattlefieldMap in addition to the WorldMap."
+L["descr_battlefieldMap"] = "All Highlights will be displayed on the BattlefieldMap in addition to the WorldMap."
 
 L["chatCommands"] = "Chat Commands:"
 L["preview"] = "Preview"
@@ -105,6 +105,9 @@ L["header_playerLocation"] = "Highlight Player Location"
 L["header_playerDirection"] = "Player Direction Line"
 L["header_misc"] = "Miscellaneous"
 L["descr_playerDirection"] = "Draws a line from the player in the direction the player is facing."
+L["never"] = "Never"
+L["always"] = "Always"
+L["whileFlying"] = "Only while flying"
 L["colorStart"] = "Start"
 L["colorEnd"] = "End"
 L["length"] = "Length"

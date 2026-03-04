@@ -8,37 +8,21 @@ local ARROW_SIZE = 17
 local LINE_THICKNESS
 local LINE_LENGTH_SCALE -- 1 means full length of map's diagonal
 
+local IsFlying, math = IsFlying, math
 
 function PlayerLocation.UpdateDB()
     db = Private.db.profile
     PlayerLocation.OnSettingsChanged()
 end
 
-local function SetVisibility(frame)
-    local showArrow = Private.db.profile.other.playerHighlight
-    local showDirection = Private.db.profile.other.playerDirection
-
-    if not showArrow then
-        frame.arrow:Hide()
-    end
-
-    if showDirection then
-        frame.line:Show()
-    else
-        frame.line:Hide()
-    end
-end
-
-function PlayerLocation.OnSettingsChanged()
+function PlayerLocation.OnSettingsChanged(args)
     LINE_THICKNESS = db.other.directionThickness
     LINE_LENGTH_SCALE = db.other.directionScale
     for map, frame in pairs(playerHighlightFrames) do
         if Main.IsValidMap(map) then
-            frame:Show()
-            SetVisibility(frame)
-            PlayerLocation.UpdateHighlightProperties(frame)
+            PlayerLocation.ShowHighlight(map, args)
         else
-            frame:Hide()
+            PlayerLocation.HideHighlight(map, "all")
         end
     end
 end
@@ -56,6 +40,7 @@ function PlayerLocation.HideHighlight(map, type)
         frame.line:Hide()
     end
 
+    -- hiding just the arrow when location animation finishes
     if type == "all" or type == "arrow" then
         frame.arrow.animStart:Stop()
         frame.arrow.animEnd:Stop()
@@ -96,12 +81,15 @@ local function UpdateHighlight(frame)
         PlayerLocation.UpdateHighlightProperties(frame)
     end
 
-    if db.other.playerHighlight then
+    if frame.showArrow then
         frame.arrow.texture:SetRotation(angle)
     end
 
-    if db.other.playerDirection then
-        local lineLength = math.sqrt(width * width + height * height) * LINE_LENGTH_SCALE
+    if frame.showDirection then
+        local lineLength = 0
+        if frame.showDirectionAlways or IsFlying() then
+            lineLength = math.sqrt(width * width + height * height) * LINE_LENGTH_SCALE
+        end
         angle = angle + 1.57 -- is off by 90°
         local ex, ey = math.cos(angle) *  lineLength, math.sin(angle) * lineLength
         frame.line:SetStartPoint("CENTER", frame, 0, 0)
@@ -215,9 +203,10 @@ function PlayerLocation.UpdateHighlightProperties(frame)
     frame.line:SetGradient('HORIZONTAL', startColor, endColor)
 end
 
-function PlayerLocation.ShowHighlight(map)
+function PlayerLocation.ShowHighlight(map, args)
+    args = args or {}
     local showArrow = Private.db.profile.other.playerHighlight
-    local showDirection = Private.db.profile.other.playerDirection
+    local showDirection = Private.db.profile.other.playerDirection ~= 1
 
     if not showArrow and not showDirection then
         return
@@ -231,22 +220,26 @@ function PlayerLocation.ShowHighlight(map)
 
     playerHighlight:Show()
 
-    if showArrow then
+    if showArrow and not args.ignoreArrow then
+        playerHighlight.showArrow = true
         playerHighlight.arrow:Show()
         playerHighlight.arrow.animStart:Play()
         playerHighlight.arrow.startTime = GetTime()
-        playerHighlight:SetScript("OnUpdate", UpdateHighlight)
     else
+        playerHighlight.showArrow = false
         playerHighlight.arrow:Hide()
     end
 
     if showDirection then
-        playerHighlight:SetScript("OnUpdate", UpdateHighlight)
+        playerHighlight.showDirection = true
+        playerHighlight.showDirectionAlways = Private.db.profile.other.playerDirection == 2
         playerHighlight.line:Show()
     else
+        playerHighlight.showDirection = false
         playerHighlight.line:Hide()
     end
 
+    playerHighlight:SetScript("OnUpdate", UpdateHighlight)
     playerHighlight.scale = playerHighlight.parent:GetEffectiveScale()
     PlayerLocation.UpdateHighlightProperties(playerHighlight)
 end
