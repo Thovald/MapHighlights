@@ -249,6 +249,7 @@ local HIGHLIGHT_INFO = {
         overrides = {
             iconScale = 1,
             iconShow = true,
+            textColor = {1, 0.85, 0.70},
         },
     },
     delveBountiful = {
@@ -289,7 +290,7 @@ local HIGHLIGHT_INFO = {
             "FlightMasterArgus",
         },
         overrides = {
-            textColor = {1, 0.94, 0.88},
+            textColor = {0.70, 0.77, 1},
             textShow = true,
         },
     },

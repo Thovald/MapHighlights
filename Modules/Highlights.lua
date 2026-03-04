@@ -599,8 +599,15 @@ function Highlights.ReleaseAnimationFrame(pin)
 
     ANIMATION_FRAME_POOL[frame] = true
     pinToFrames[pin].animFrame = nil
-    frame.anim:Stop()
     frame:Hide()
+
+    -- on AreaPOI updates, pins get released and reaquired frequently.
+    -- this stops looping animations to be stopped (on release) and restarted again
+    RunNextFrame(function()
+        if ANIMATION_FRAME_POOL[frame] then
+            frame.anim:Stop()
+        end
+    end)
 end
 
 function Highlights.PlayAnimation(pin, playCondition)
@@ -637,11 +644,11 @@ function Highlights.StopAllAnimations(map)
 end
 
 function Highlights.PlayAnimationOnAcquired(pin, animFrame, lastAreaPOIUpdate)
-    if GetTime() == lastAreaPOIUpdate then
+    if GetTime() == lastAreaPOIUpdate and not animFrame.playOnLoop then
         return
     end
 
-    if animFrame.anim and animFrame.playOnMapOpen and not pinToFrames[pin] then
+    if animFrame.anim and animFrame.playOnMapOpen and not pinToFrames[pin] and not animFrame.anim:IsPlaying() then
         -- new pin, play animation
         animFrame.anim:Play()
     end
