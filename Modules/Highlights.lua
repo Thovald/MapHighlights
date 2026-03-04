@@ -50,12 +50,19 @@ local function GetHighlightFrame(pool, newFrameFunction)
 end
 
 local function RestorePin(pinInfo)
-    local pinTexture = pinInfo.texturePath
+    local pinTexture = pinInfo.pin[pinInfo.textureKey]
+    if not pinTexture then
+        return
+    end
     pinTexture:SetScale(pinInfo.origScale)
 end
 
 function Highlights.ApplyScale(pinInfo, highlightDB)
-    local pinTexture = pinInfo.texturePath
+    local pinTexture = pinInfo.pin[pinInfo.textureKey]
+    if not pinTexture then
+        return
+    end
+
     local origScale = pinInfo.origScale
     local newScale = origScale * highlightDB.scale * db.hl.scale
     local scaleChanged = origScale ~= newScale
@@ -713,7 +720,7 @@ local function ApplyPreviewSettings(pin, selectedId)
         return
     end
 
-    local pinInfo = Main.CreatePinInfo(atlasName, pin.texture, "pinType", pin)
+    local pinInfo = Main.CreatePinInfo(atlasName, "texture", "pinType", pin)
     pinInfo.origScale = 1
     Highlights.ApplyScale(pinInfo, highlightDB)
 

@@ -119,17 +119,16 @@ local function IsPinOnMap(pin)
     end
 end
 
-function Main.CreatePinInfo(textureName, texturePath, pinType, pin)
-    local origScale = texturePath:GetScale()
+function Main.CreatePinInfo(textureName, textureKey, pinType, pin)
     local pinInfo = {
         pin = pin,
         name = pin.name,
         frameLevel = pin:GetFrameLevel(),
         textureName = textureName,
-        texturePath = texturePath,
+        textureKey = textureKey,
         pinType = pinType,
-        origScale = origScale,
-        currentScale = origScale,
+        origScale = 1,
+        currentScale = 1,
     }
     return pinInfo
 end
@@ -139,11 +138,11 @@ local function AreaPOIAcquired(pin)
         return
     end
 
-    local texturePath = pin.Texture
+    local textureKey = "Texture"
     local textureName = pin.poiInfo.atlasName
     local hlInfo = Highlights.textureToInfo[textureName]
     if textureName and hlInfo then
-        local pinInfo = Main.CreatePinInfo(textureName, texturePath, "AreaPOI", pin)
+        local pinInfo = Main.CreatePinInfo(textureName, textureKey, "AreaPOI", pin)
         ProcessPin(pin, hlInfo, pinInfo)
     end
 end
@@ -153,15 +152,15 @@ local function AreaPOIReleased(pin)
 end
 
 local function VignetteAcquired(pin)
-    if not IsPinOnMap(pin) then
+    if not IsPinOnMap(pin) or not pin.Texture then
         return
     end
 
-    local texturePath = pin.Texture
-    local textureName = texturePath:GetAtlas()
+    local textureKey = "Texture"
+    local textureName = pin.Texture:GetAtlas()
     local hlInfo = Highlights.textureToInfo[textureName]
     if textureName and hlInfo then
-        local pinInfo = Main.CreatePinInfo(textureName, texturePath, "Vignette", pin)
+        local pinInfo = Main.CreatePinInfo(textureName, textureKey, "Vignette", pin)
         ProcessPin(pin, hlInfo, pinInfo)
     end
 end
@@ -171,15 +170,15 @@ local function VignetteReleased(pin)
 end
 
 local function WaypointAcquired(pin)
-    if not IsPinOnMap(pin) then
+    if not IsPinOnMap(pin) or not pin.Icon then
         return
     end
 
-    local texturePath = pin.Icon
+    local textureKey = "Icon"
     local textureName = pin.Icon:GetAtlas()
     local hlInfo = Highlights.textureToInfo[textureName]
     if textureName and hlInfo then
-        local pinInfo = Main.CreatePinInfo(textureName, texturePath, "Waypoint", pin)
+        local pinInfo = Main.CreatePinInfo(textureName, textureKey, "Waypoint", pin)
         pinInfo.name = "Waypoint"
         ProcessPin(pin, hlInfo, pinInfo)
     end
