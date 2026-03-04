@@ -193,6 +193,7 @@ local HIGHLIGHT_INFO = {
             "TaxiNode_Neutral",
             "TaxiNode_Alliance",
             "TaxiNode_Horde",
+            "FlightMaster_Argus-TaxiNode_Neutral"
         },
         overrides = {
             iconScale = 1,
