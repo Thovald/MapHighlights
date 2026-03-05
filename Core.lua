@@ -224,10 +224,10 @@ do
         areaPOI = {
             mixins = {
                 AreaPOIPinMixin,
-                --DungeonEntrancePinMixin,
-                --MapLinkPinMixin,
-                --DelveEntrancePinMixin,
-                --FlightPointPinMixin
+                DungeonEntrancePinMixin,
+                MapLinkPinMixin,
+                DelveEntrancePinMixin,
+                FlightPointPinMixin
             },
             templates = {
                 "AreaPOIPinTemplate",
