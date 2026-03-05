@@ -13,6 +13,7 @@ local Highlights = Private.Highlights
 local PlayerLocation = Private.PlayerLocation
 local MapHooks = {} -- namespace for map hooks
 local isMapHooked = {}
+local isRareScannerHooked = false
 
 local GetTime, pairs, ipairs = GetTime, pairs, ipairs
 
@@ -139,6 +140,7 @@ local function GetTexturePath(pin)
 end
 
 local function AreaPOIAcquired(pin)
+    local texturePath = GetTexturePath(pin)
     if not IsPinOnMap(pin) then
         return
     end
@@ -148,7 +150,6 @@ local function AreaPOIAcquired(pin)
         return
     end
 
-    --local textureName = pin.poiInfo.atlasName
     local textureName = texturePath:GetAtlas() -- may be more accurate (see argus flightpaths)
     local hlInfo = Highlights.textureToInfo[textureName]
     if textureName and hlInfo then
@@ -223,10 +224,10 @@ do
         areaPOI = {
             mixins = {
                 AreaPOIPinMixin,
-                DungeonEntrancePinMixin,
-                MapLinkPinMixin,
-                DelveEntrancePinMixin,
-                FlightPointPinMixin
+                --DungeonEntrancePinMixin,
+                --MapLinkPinMixin,
+                --DelveEntrancePinMixin,
+                --FlightPointPinMixin
             },
             templates = {
                 "AreaPOIPinTemplate",
@@ -292,10 +293,8 @@ do
         end
 
     end
-
 end
 
-------------------
 -- Map Hooks
 ------------------
 
@@ -419,6 +418,15 @@ local function OnLogin()
     SetMapHooks(BattlefieldMapFrame)
 
     ShowBattlefieldMapOnLogin()
+
+    -- RareScanner AddOn overrides ArePOIPinMixin
+    local rsAreaMixin = RSAreaPOIPinMixin
+    if rsAreaMixin and not isRareScannerHooked then
+        hooksecurefunc(rsAreaMixin, "OnAcquired", AreaPOIAcquired)
+        hooksecurefunc(rsAreaMixin, "OnReleased", AreaPOIReleased)
+        Main.PIN_TEMPLATE_TO_FUNCTION["RSAreaPOIPinTemplate"] = AreaPOIAcquired
+        isRareScannerHooked = true
+    end
 end
 
 local function OnAreaPOISUpdated()
