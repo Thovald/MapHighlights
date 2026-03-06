@@ -227,7 +227,7 @@ local HIGHLIGHT_INFO = {
             textPosition = 1,
             textShow = true,
             textOffset = -3,
-            textColor = {0.43, 0.90, 0.82},
+            textColor = {0.23, 0.90, 0.78},
         },
     },
     raid = {
@@ -239,7 +239,7 @@ local HIGHLIGHT_INFO = {
             textPosition = 1,
             textShow = true,
             textOffset = -3,
-            textColor = {0.50, 0.90, 0.47},
+            textColor = {0.27, 0.90, 0.23},
         },
     },
     delve = {
