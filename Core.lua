@@ -109,7 +109,6 @@ local function ProcessPin(pin, hlInfo, pinInfo)
 end
 
 local function IsPinOnMap(pin)
-    -- can add BattlefieldMapFrame later
     if pin.GetOwningMap then
         local owningMap = pin:GetOwningMap()
         local validWorldMap = owningMap == WorldMapFrame
@@ -140,7 +139,6 @@ local function GetTexturePath(pin)
 end
 
 local function AreaPOIAcquired(pin)
-    local texturePath = GetTexturePath(pin)
     if not IsPinOnMap(pin) then
         return
     end
@@ -295,6 +293,7 @@ do
     end
 end
 
+------------------
 -- Map Hooks
 ------------------
 
