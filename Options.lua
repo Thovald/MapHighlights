@@ -143,6 +143,7 @@ local HIGHLIGHT_ORDER = {
             "delve",
             "delveBountiful",
             "poiHub",
+            "ritualSite",
         },
     },
     {
@@ -324,6 +325,7 @@ local HIGHLIGHT_INFO = {
         textures = {
             "VignetteKillElite",
             "worldquest-questmarker-dragon-silver",
+            "Rare-Elite-Star"
         },
         overrides = {
             animStyle = 2,
@@ -360,6 +362,16 @@ local HIGHLIGHT_INFO = {
         overrides = {
             isEnabled = false,
             textShow = true,
+        },
+    },
+    ritualSite = {
+        name = L["Ritual Site"],
+        textures = {
+            "Ritual-Sites-Map-Icon",
+        },
+        overrides = {
+            textShow = true,
+            textColor = {0.85, 0.68, 1},
         },
     },
     -- greedyEmissary = {

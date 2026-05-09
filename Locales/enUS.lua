@@ -91,6 +91,7 @@ L["WQ Special Assignment"] = true
 L["S.C.R.A.P. Heap (active)"] = true
 L["S.C.R.A.P. Heap (inactive)"] = true
 L["Treasure Goblin Spawn"] = true
+L["Ritual Site"] = true
 
 L["checkbox_playerLocation"] = "Highlight Player Location"
 L["descr_playerLocation"] = "Highlights the location arrow when opening the map and on mouse clicks."
@@ -118,6 +119,4 @@ L["new"] = "New" -- add new custom highlight
 L["rename"] = "Rename" -- rename custom highlight
 L["delete"] = "Delete" -- delete custom highlight
 L["copy"] = "Copy Settings from ..." -- copy settings from one highlight to the current one
-
-
 

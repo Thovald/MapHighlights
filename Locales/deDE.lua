@@ -92,6 +92,7 @@ L["WQ Special Assignment"] = "WQ Spezialauftrag"
 L["S.C.R.A.P. Heap (active)"] = "SCHROTT-Haufen (aktiv)"
 L["S.C.R.A.P. Heap (inactive)"] = "SCHROTT-Haufen (inaktiv)"
 L["Treasure Goblin Spawn"] = "Schatzgoblin"
+L["Ritual Site"] = "Ritualstätte"
 
 L["checkbox_playerLocation"] = "Spieler Position hervorheben"
 L["descr_playerLocation"] = "Beim Öffnen der Karte und bei Maus Klicks wird die Spieler Position hervorgehoben."
