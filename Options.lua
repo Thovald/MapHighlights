@@ -1241,9 +1241,11 @@ local function OnOptionsClose()
     if Config.previewFrame and Config.previewFrame.frame.pin.animFrame.anim then
         Config.previewFrame.frame.pin.animFrame.anim:Stop()
     end
+    Config.isOptionsOpen = false
 end
 
 local function OnOptionsOpen(frame)
+    Config.isOptionsOpen = true
 end
 
 local function SetHooksForAce()

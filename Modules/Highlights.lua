@@ -602,12 +602,17 @@ function Highlights.ReleaseAnimationFrame(pin)
     frame:Hide()
 
     -- on AreaPOI updates, pins get released and reaquired frequently.
-    -- this stops looping animations to be stopped (on release) and restarted again
-    RunNextFrame(function()
-        if ANIMATION_FRAME_POOL[frame] then
-            frame.anim:Stop()
-        end
-    end)
+    -- this stops looping animations to be stopped (on release) and restarted again.
+    -- avoid while options are open cause it'll bug out looping animations if the map is open.
+    if Config.isOptionsOpen then
+        frame.anim:Stop()
+    else
+        RunNextFrame(function()
+            if ANIMATION_FRAME_POOL[frame] then
+                frame.anim:Stop()
+            end
+        end)
+    end
 end
 
 function Highlights.PlayAnimation(pin, playCondition)
@@ -821,6 +826,8 @@ function Highlights.PrintIcons(mapFrame)
         return
     end
 
+    local iconInfo = {}
+
     local frame = mapFrame.ScrollContainer.Child
     local children = {frame:GetChildren()}
     print("__________________________________________")
@@ -830,15 +837,28 @@ function Highlights.PrintIcons(mapFrame)
                     or (child.Texture and child.Texture:GetAtlas())
                     or (child.UnderlayAtlas and child.UnderlayAtlas:GetAtlas())
             if texture and not Highlights.textureToInfo[texture] then
-                print(" ")
-                print(child.pinTemplate)
-                print("  name:", child.poiInfo and child.poiInfo.name or child.name)
-                if texture then
-                    print("  texture:", texture )
-                end
-                print("  is poi", child.poiInfo and true)
+                iconInfo[texture] = iconInfo[texture] or {
+                    templates = {},
+                    names = {},
+                }
+                local name = child.poiInfo and child.poiInfo.name or child.name
+                iconInfo[texture].templates[child.pinTemplate] = true
+                tinsert(iconInfo[texture].names, name)
             end
         end
     end
-    print("__________________________________________")
+
+    for texture, info in pairs(iconInfo) do
+
+        print("tex:", texture)
+        for template in pairs(info.templates) do
+            print(" template:", template)
+        end
+
+        for _, name in ipairs(info.names) do
+            print(" name:", name)
+        end
+        print("----------")
+    end
+
 end
