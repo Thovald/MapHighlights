@@ -115,5 +115,5 @@ L["colorStart"] = "起点"
 L["colorEnd"] = "终点"
 L["length"] = "长度"
 L["thickness"] = "粗细"
-
-
+L["outlineThinOld"] = "细（旧）"
+L["outlineThickOld"] = "粗（旧）"

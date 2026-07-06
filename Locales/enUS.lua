@@ -119,4 +119,5 @@ L["new"] = "New" -- add new custom highlight
 L["rename"] = "Rename" -- rename custom highlight
 L["delete"] = "Delete" -- delete custom highlight
 L["copy"] = "Copy Settings from ..." -- copy settings from one highlight to the current one
-
+L["outlineThinOld"] = "Thin (Old)"
+L["outlineThickOld"] = "Thick (Old)"

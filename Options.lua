@@ -67,7 +67,7 @@ end
 -- UI Data
 ------------------
 
-local TEXT_OUTLINE = {L["outlineNone"], L["outlineThin"], L["outlineThick"]}
+local TEXT_OUTLINE = {L["outlineNone"], L["outlineThin"], L["outlineThick"], L["outlineThinOld"], L["outlineThickOld"]}
 local POSITION = {L["top"], L["bottom"], L["left"], L["right"], L["center"]}
 local ANIMATION_PLAYBACK = {L["animPlayback_onBoth"], L["animPlayback_onMap"], L["animPlayback_onClick"], L["animPlayback_loop"]}
 local ANIMATION_STYLE = {L["animStyle1"], L["animStyle2"], L["animStyle3"], L["animStyle4"]}
@@ -786,7 +786,7 @@ local function GetHighlightEntry(id, info)
                 get = HighlightGetter(id, "textFont"),
                 set = HighlightSetter(id, "textFont"),
                 disabled = HighlightDisabler(id, "textCustom", "textShow"),
-                width = 1.5,
+                width = 1.4,
                 order = 100,
             },
             dropdown_textOutline = {
@@ -796,7 +796,7 @@ local function GetHighlightEntry(id, info)
                 get = HighlightGetter(id, "textOutline"),
                 set = HighlightSetter(id, "textOutline"),
                 disabled = HighlightDisabler(id, "textCustom", "textShow"),
-                width = 0.5,
+                width = 0.7,
                 order = 105,
             },
     }
@@ -952,7 +952,7 @@ local TAB_HIGHLIGHTS = {
                 db.hl.textOutline = value
                 Highlights.OnSettingsChanged()
             end,
-            width = 0.5,
+            width = 0.7,
             order = 20,
         },
         slider_textLevel = {
@@ -967,7 +967,7 @@ local TAB_HIGHLIGHTS = {
                 db.hl.textLevel = value
                 Highlights.OnSettingsChanged()
                 end,
-            width = 1,
+            width = 0.8,
             order = 25,
         },
         bottomSpacer = {

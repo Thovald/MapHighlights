@@ -254,8 +254,10 @@ local TEXT_ANCHOR_MAPPING = {
 
 local TEXT_OUTLINE_MAPPING = {
     [1] = "",
-    [2] = "OUTLINE",
-    [3] = "THICKOUTLINE",
+    [2] = "OUTLINE,SLUG",
+    [3] = "THICKOUTLINE,SLUG",
+    [4] = "OUTLINE",
+    [5] = "THICKOUTLINE",
 }
 
 local function ShortenPortalTextChinese(str)
@@ -337,11 +339,19 @@ local function GetHighlightTextString(hlInfo, pinInfo)
     end
 end
 
+local fontObjectCounter = 0
 local function CreateTextFrame()
     local frame = CreateFrame("Frame")
     local text = frame:CreateFontString()
-    text:SetShadowOffset(1,-1)
+
+    -- one dedicated font object per frame, created once. necessary for drop shadow to work.
+    fontObjectCounter = fontObjectCounter + 1
+    local fontObj = CreateFont("MyAddonHighlightFont" .. fontObjectCounter)
+    fontObj:SetShadowOffset(1, -1)
+    text:SetFontObject(fontObj)
+
     frame.text = text
+    frame.fontObject = fontObj
     return frame
 end
 
@@ -357,7 +367,6 @@ local function ApplyTextSettings(textFrame, highlightDB, pinInfo, pin, hlInfo)
 
     textFrame.text:ClearAllPoints()
     textFrame.text:SetPoint(textPosInfo.anchor1, textFrame, textPosInfo.anchor2, offsetX, offsetY)
-    textFrame.text:SetVertexColor(unpack(highlightDB.textColor))
 
     if highlightDB.textCustom then
         font = highlightDB.textFont
@@ -367,9 +376,18 @@ local function ApplyTextSettings(textFrame, highlightDB, pinInfo, pin, hlInfo)
         outline = TEXT_OUTLINE_MAPPING[db.hl.textOutline]
     end
 
+    local fontObj = textFrame.fontObject
+    fontObj:SetFont(LSM:Fetch("font", font), fontSize, outline)
+
+    if outline == "" then
+        fontObj:SetShadowColor(0, 0, 0, 1)
+    else
+        fontObj:SetShadowColor(0, 0, 0, 0)
+    end
+
     local text = GetHighlightTextString(hlInfo, pinInfo)
-    textFrame.text:SetFont(LSM:Fetch("font", font), fontSize, outline)
     textFrame.text:SetText(text)
+    textFrame.text:SetVertexColor(unpack(highlightDB.textColor))
     textFrame:SetAlpha(highlightDB.textAlpha)
 
 end

@@ -120,3 +120,5 @@ L["new"] = "Создать" -- add new custom highlight
 L["rename"] = "Переименовать" -- rename custom highlight
 L["delete"] = "Удалить" -- delete custom highlight
 L["copy"] = "Копировать настройки из ..." -- copy settings from one highlight to the current one
+L["outlineThinOld"] = "Тонкий (старый)"
+L["outlineThickOld"] = "Толстый (старый)"
