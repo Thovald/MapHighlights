@@ -307,7 +307,7 @@ local HIGHLIGHT_INFO = {
             "FlightMasterArgus",
         },
         overrides = {
-            textColor = {0.7, 0.98, 1},
+            textColor = {0.75, 0.95, 0.95},
             textShow = true,
         },
     },
