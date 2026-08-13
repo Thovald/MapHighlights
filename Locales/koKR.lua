@@ -1,5 +1,6 @@
 local L = LibStub("AceLocale-3.0"):NewLocale("MapHighlights", "koKR")
 if not L then return end
+-- Translated by labrie75
 
 L["enable"] = "활성화"
 L["scale"] = "크기"
@@ -84,6 +85,7 @@ L["Flightmaster (undiscovered)"] = "비행 조련사 (미발견)"
 L["Dungeon"] = "던전"
 L["Raid"] = "공격대"
 L["Delve"] = "구렁"
+L["Lair"] = "소굴"
 L["Bountiful Delve"] = "풍요로운 구렁"
 L["Quest Hub"] = "퀘스트 지점"
 L["Zone Portal"] = "지역 차원문"

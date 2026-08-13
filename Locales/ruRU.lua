@@ -1,6 +1,7 @@
 local L = LibStub("AceLocale-3.0"):NewLocale("MapHighlights", "ruRU")
 if not L then return end
 -- Translator ZamestoTV
+
 L["enable"] = "Включить"
 L["scale"] = "Масштаб"
 L["alpha"] = "Прозрачность"
@@ -35,6 +36,8 @@ L["dropdown_textOutline"] = "Контур текста"
 L["outlineNone"] = "Нет"
 L["outlineThin"] = "Тонкий"
 L["outlineThick"] = "Толстый"
+L["outlineThinOld"] = "Тонкий (старый)"
+L["outlineThickOld"] = "Толстый (старый)"
 --
 -- individual settings
 L["header_hlSelection"] = "Индивидуальные настройки подсветки"
@@ -121,5 +124,4 @@ L["new"] = "Создать" -- add new custom highlight
 L["rename"] = "Переименовать" -- rename custom highlight
 L["delete"] = "Удалить" -- delete custom highlight
 L["copy"] = "Копировать настройки из ..." -- copy settings from one highlight to the current one
-L["outlineThinOld"] = "Тонкий (старый)"
-L["outlineThickOld"] = "Толстый (старый)"
+

@@ -34,6 +34,8 @@ L["dropdown_textOutline"] = "Text Outline"
 L["outlineNone"] = "None"
 L["outlineThin"] = "Thin"
 L["outlineThick"] = "Thick"
+L["outlineThinOld"] = "Thin (Old)"
+L["outlineThickOld"] = "Thick (Old)"
 --
 -- individual settings
 L["header_hlSelection"] = "Individual Highlight Settings"
@@ -120,5 +122,3 @@ L["new"] = "New" -- add new custom highlight
 L["rename"] = "Rename" -- rename custom highlight
 L["delete"] = "Delete" -- delete custom highlight
 L["copy"] = "Copy Settings from ..." -- copy settings from one highlight to the current one
-L["outlineThinOld"] = "Thin (Old)"
-L["outlineThickOld"] = "Thick (Old)"

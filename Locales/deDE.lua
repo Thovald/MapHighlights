@@ -1,6 +1,7 @@
 local L = LibStub("AceLocale-3.0"):NewLocale("MapHighlights", "deDE")
 if not L then return end
 
+
 L["enable"] = "Aktivieren"
 L["scale"] = "Skalierung"
 L["alpha"] = "Alpha"
@@ -35,6 +36,8 @@ L["dropdown_textOutline"] = "Text Umriss"
 L["outlineNone"] = "Kein"
 L["outlineThin"] = "Dünn"
 L["outlineThick"] = "Dick"
+L["outlineThinOld"] = "Dünn (Alt)"
+L["outlineThickOld"] = "Dick (Alt)"
 --
 -- individual settings
 L["header_hlSelection"] = "Individuelle Highlight Einstellungen"
@@ -121,5 +124,3 @@ L["new"] = "Neu"
 L["rename"] = "Umbenennen"
 L["delete"] = "Löschen"
 L["copy"] = "Kopiere Einstellungen von ..."
-L["outlineThinOld"] = "Dünn (Alt)"
-L["outlineThickOld"] = "Dick (Alt)"

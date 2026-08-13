@@ -36,6 +36,8 @@ L["dropdown_textOutline"] = "文本轮廓"
 L["outlineNone"] = "无"
 L["outlineThin"] = "细"
 L["outlineThick"] = "粗"
+L["outlineThinOld"] = "细（旧）"
+L["outlineThickOld"] = "粗（旧）"
 --
 -- individual settings
 L["header_hlSelection"] = "独立高亮设置"
@@ -116,5 +118,9 @@ L["colorStart"] = "起点"
 L["colorEnd"] = "终点"
 L["length"] = "长度"
 L["thickness"] = "粗细"
-L["outlineThinOld"] = "细（旧）"
-L["outlineThickOld"] = "粗（旧）"
+
+L["Custom"] = "自定义" -- new highlights that the user added
+L["new"] = "新建" -- add new custom highlight
+L["rename"] = "重命名" -- rename custom highlight
+L["delete"] = "删除" -- delete custom highlight
+L["copy"] = "从其他高亮复制设置…" -- copy settings from one highlight to the current one
