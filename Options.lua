@@ -140,6 +140,7 @@ local HIGHLIGHT_ORDER = {
         childIds = {
             "dungeon",
             "raid",
+            "lair",
             "delve",
             "delveBountiful",
             "poiHub",
@@ -243,6 +244,18 @@ local HIGHLIGHT_INFO = {
             textColor = {0.27, 0.90, 0.23},
         },
     },
+    lair = {
+        name = L["Lair"],
+        textures = {
+            "Lairs",
+        },
+        overrides = {
+            textPosition = 1,
+            textShow = true,
+            textOffset = -3,
+            textColor = {1, 0.88, 0.36},
+        },
+    },
     delve = {
         name = L["Delve"],
         textures = {
@@ -251,6 +264,7 @@ local HIGHLIGHT_INFO = {
         overrides = {
             iconScale = 1,
             iconShow = true,
+            textShow = true,
             textColor = {1, 0.85, 0.70},
         },
     },
@@ -293,7 +307,7 @@ local HIGHLIGHT_INFO = {
             "FlightMasterArgus",
         },
         overrides = {
-            textColor = {1, 1, 0.675},
+            textColor = {0.7, 0.98, 1},
             textShow = true,
         },
     },

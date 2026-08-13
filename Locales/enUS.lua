@@ -80,6 +80,7 @@ L["Flightmaster"] = true
 L["Flightmaster (undiscovered)"] = true
 L["Dungeon"] = true
 L["Raid"] = true
+L["Lair"] = true
 L["Delve"] = true
 L["Bountiful Delve"] = true
 L["Quest Hub"] = true

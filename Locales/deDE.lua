@@ -81,6 +81,7 @@ L["Flightmaster"] = "Flugmeister"
 L["Flightmaster (undiscovered)"] = "Flugmeister (unentdeckt)"
 L["Dungeon"] = true
 L["Raid"] = true
+L["Lair"] = "Hort"
 L["Delve"] = "Tiefe"
 L["Bountiful Delve"] = "Großzügige Tiefe"
 L["Quest Hub"] = "Quest-Hub"
