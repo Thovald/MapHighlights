@@ -338,6 +338,7 @@ local HIGHLIGHT_INFO = {
     rareEncounter = {
         name = L["Rare Encounter"],
         textures = {
+            "VignetteKill",
             "VignetteKillElite",
             "worldquest-questmarker-dragon-silver",
             "Rare-Elite-Star"
