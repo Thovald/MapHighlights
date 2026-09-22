@@ -478,6 +478,20 @@ local ANIMATION_PLAYBACK_MAPPING = {
     },
 }
 
+local function ConfigureAnimationCallbacks(anim, animFrame)
+    anim:SetScript("OnPlay", function()
+        animFrame:Show()
+    end)
+
+    anim:SetScript("OnFinished", function()
+        animFrame:Hide()
+    end)
+
+    anim:SetScript("OnStop", function()
+        animFrame:Hide()
+    end)
+end
+
 local function CreateFadeAnim(frame, animStyle)
     local cfg = ANIMATION_STYLE_SETTINGS[animStyle]
 
@@ -575,6 +589,10 @@ local function CreateAnimationFrame()
     frame.pulse = CreatePulseAnim(frame, "pulse")
     frame.blink = CreateBlinkAnim(frame, "blink")
 
+    ConfigureAnimationCallbacks(frame.shrinkFade, frame)
+    ConfigureAnimationCallbacks(frame.growFade, frame)
+    ConfigureAnimationCallbacks(frame.pulse, frame)
+    ConfigureAnimationCallbacks(frame.blink, frame)
     return frame
 end
 
