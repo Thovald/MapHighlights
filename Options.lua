@@ -143,6 +143,7 @@ local HIGHLIGHT_ORDER = {
             "lair",
             "delve",
             "delveBountiful",
+            "labyrinth",
             "poiHub",
             "ritualSite",
         },
@@ -226,6 +227,11 @@ local HIGHLIGHT_INFO = {
             "Dungeon",
         },
         overrides = {
+            iconShow = true,
+            iconAlpha = 1,
+            iconScale = 1.1,
+            iconStyle = 3,
+            iconTexture = 3,
             textPosition = 1,
             textShow = true,
             textOffset = -3,
@@ -238,6 +244,11 @@ local HIGHLIGHT_INFO = {
             "Raid",
         },
         overrides = {
+            iconShow = true,
+            iconAlpha = 1,
+            iconScale = 1.2,
+            iconStyle = 3,
+            iconTexture = 3,
             textPosition = 1,
             textShow = true,
             textOffset = -3,
@@ -281,6 +292,20 @@ local HIGHLIGHT_INFO = {
             textColor = {1, 0.60, 0.27}
         },
     },
+    labyrinth = {
+        name = L["Labyrinth"],
+        textures = {
+            "overworld-active-64x64",
+        },
+        overrides = {
+            iconScale = 1.1,
+            iconAlpha = 0.8,
+            textShow = true,
+            iconShow = true,
+            textColor = {0.65, 1, 0.88}
+        },
+    },
+    
     poiHub = {
         name = L["Quest Hub"],
         textures = {

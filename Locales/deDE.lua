@@ -87,6 +87,7 @@ L["Raid"] = true
 L["Lair"] = "Hort"
 L["Delve"] = "Tiefe"
 L["Bountiful Delve"] = "Großzügige Tiefe"
+L["Labyrinth"] = "Labyrinth"
 L["Quest Hub"] = "Quest-Hub"
 L["Zone Portal"] = "Reise Portale"
 L["Cave Exit (Up)"] = "Höhlenausgang (Auf)"

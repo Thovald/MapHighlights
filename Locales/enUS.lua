@@ -85,6 +85,7 @@ L["Raid"] = true
 L["Lair"] = true
 L["Delve"] = true
 L["Bountiful Delve"] = true
+L["Labyrinth"] = true
 L["Quest Hub"] = true
 L["Zone Portal"] = true
 L["Cave Exit (Up)"] = true
